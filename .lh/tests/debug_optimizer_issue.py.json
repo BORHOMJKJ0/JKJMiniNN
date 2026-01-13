@@ -1,0 +1,18 @@
+{
+    "sourceFile": "tests/debug_optimizer_issue.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1768338766766,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1768338766766,
+            "name": "Commit-0",
+            "content": "import numpy as np\r\n\r\nfrom core.network import NeuralNetwork\r\nfrom layers.dense import DenseLayer\r\nfrom layers.activations import ReLU, Sigmoid\r\nfrom layers.normalization import BatchNorm\r\nfrom losses.loss_functions import SoftmaxCrossEntropy\r\nfrom optimizers.optimizer_classes import Adam\r\nfrom training.trainer import Trainer\r\n\r\nnp.random.seed(0)\r\n\r\nX = np.random.randn(20, 4)\r\ny = np.random.randint(0, 3, size=(20,))\r\n\r\nnetwork = NeuralNetwork()\r\nnetwork.add_layer(DenseLayer(4, 16))\r\nnetwork.add_layer(Sigmoid())\r\nnetwork.add_layer(BatchNorm(16))\r\nnetwork.add_layer(DenseLayer(16, 8))\r\nnetwork.add_layer(ReLU())\r\nnetwork.add_layer(DenseLayer(8, 3))\r\nnetwork.set_loss(SoftmaxCrossEntropy())\r\n\r\noptimizer = Adam(lr=0.01)\r\ntrainer = Trainer(network, optimizer)\r\n\r\nfor step in range(10):\r\n    try:\r\n        loss = trainer.train_step(X, y)\r\n        params_list, grads_list = network.get_params_and_grads()\r\n        for i, (params, grads) in enumerate(zip(params_list, grads_list)):\r\n            print(f\"Layer {i} param keys: {list(params.keys())}\")\r\n            print(f\"Layer {i} grad keys: {list(grads.keys())}\")\r\n        print('Step', step, 'loss', loss)\r\n    except Exception as e:\r\n        print('Exception at step', step, type(e), e)\r\n        params_list, grads_list = network.get_params_and_grads()\r\n        for i, (params, grads) in enumerate(zip(params_list, grads_list)):\r\n            print(f\"Layer {i} param keys: {list(params.keys())}\")\r\n            print(f\"Layer {i} grad keys: {list(grads.keys())}\")\r\n        raise\r\n"
+        }
+    ]
+}

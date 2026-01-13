@@ -1,0 +1,18 @@
+{
+    "sourceFile": "optimizers/optimizer_classes.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1768338757939,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1768338757939,
+            "name": "Commit-0",
+            "content": "import numpy as np\r\n\r\n\r\nclass Optimizer:\r\n    def update(self, params, grads):\r\n        raise NotImplementedError\r\n\r\n\r\nclass SGD(Optimizer):\r\n    def __init__(self, lr=0.01):\r\n        self.lr = lr\r\n\r\n    def update(self, params, grads):\r\n        for key in params.keys():\r\n            params[key] -= self.lr * grads[key]\r\n\r\n\r\nclass Momentum(Optimizer):\r\n    def __init__(self, lr=0.01, momentum=0.9):\r\n        self.lr = lr\r\n        self.momentum = momentum\r\n        self.v = {}\r\n\r\n    def update(self, params, grads):\r\n        pid = id(params)\r\n        if pid not in self.v:\r\n            self.v[pid] = {}\r\n            for key, val in params.items():\r\n                self.v[pid][key] = np.zeros_like(val)\r\n\r\n        for key in params.keys():\r\n            self.v[pid][key] = self.momentum * \\\r\n                self.v[pid][key] - self.lr * grads[key]\r\n            params[key] += self.v[pid][key]\r\n\r\n\r\nclass AdaGrad(Optimizer):\r\n    def __init__(self, lr=0.01):\r\n        self.lr = lr\r\n        self.h = {}\r\n\r\n    def update(self, params, grads):\r\n        pid = id(params)\r\n        if pid not in self.h:\r\n            self.h[pid] = {}\r\n            for key, val in params.items():\r\n                self.h[pid][key] = np.zeros_like(val)\r\n\r\n        for key in params.keys():\r\n            self.h[pid][key] += grads[key] ** 2\r\n            params[key] -= self.lr * grads[key] / \\\r\n                (np.sqrt(self.h[pid][key]) + 1e-7)\r\n\r\n\r\nclass Adam(Optimizer):\r\n    def __init__(self, lr=0.001, beta1=0.9, beta2=0.999):\r\n        self.lr = lr\r\n        self.beta1 = beta1\r\n        self.beta2 = beta2\r\n        self.iter = 0\r\n        self.m = {}\r\n        self.v = {}\r\n\r\n    def update(self, params, grads):\r\n        pid = id(params)\r\n        if pid not in self.m:\r\n            self.m[pid] = {}\r\n            self.v[pid] = {}\r\n            for key, val in params.items():\r\n                self.m[pid][key] = np.zeros_like(val)\r\n                self.v[pid][key] = np.zeros_like(val)\r\n\r\n        self.iter += 1\r\n        lr_t = self.lr * np.sqrt(1.0 - self.beta2 **\r\n                                 self.iter) / (1.0 - self.beta1 ** self.iter)\r\n\r\n        for key in params.keys():\r\n            self.m[pid][key] = self.beta1 * \\\r\n                self.m[pid][key] + (1 - self.beta1) * grads[key]\r\n            self.v[pid][key] = self.beta2 * self.v[pid][key] + \\\r\n                (1 - self.beta2) * (grads[key] ** 2)\r\n\r\n            params[key] -= lr_t * self.m[pid][key] / \\\r\n                (np.sqrt(self.v[pid][key]) + 1e-7)\r\n"
+        }
+    ]
+}

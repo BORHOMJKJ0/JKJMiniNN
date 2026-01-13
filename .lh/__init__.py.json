@@ -1,0 +1,18 @@
+{
+    "sourceFile": "__init__.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1768338821401,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1768338821401,
+            "name": "Commit-0",
+            "content": "from core import NeuralNetwork, Layer\r\nfrom layers import DenseLayer, ReLU, Sigmoid, Tanh, LinearActivation, Dropout, BatchNorm\r\nfrom losses import MeanSquaredError, SoftmaxCrossEntropy\r\nfrom optimizers import SGD, Momentum, AdaGrad, Adam\r\nfrom training import Trainer, HyperparameterTuner\r\n\r\n__version__ = '1.0.0'\r\n__all__ = [\r\n    'NeuralNetwork',\r\n    'Layer',\r\n    'DenseLayer',\r\n    'ReLU',\r\n    'Sigmoid',\r\n    'Tanh',\r\n    'LinearActivation',\r\n    'Dropout',\r\n    'BatchNorm',\r\n    'MeanSquaredError',\r\n    'SoftmaxCrossEntropy',\r\n    'SGD',\r\n    'Momentum',\r\n    'AdaGrad',\r\n    'Adam',\r\n    'Trainer',\r\n    'HyperparameterTuner'\r\n]\r\n"
+        }
+    ]
+}

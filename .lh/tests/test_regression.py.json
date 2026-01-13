@@ -1,0 +1,22 @@
+{
+    "sourceFile": "tests/test_regression.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1768335828856,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1768338785724,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,17 +1,17 @@\n+from training.trainer import Trainer\r\n+from optimizers.optimizer_classes import SGD, Adam\r\n+from losses.loss_functions import MeanSquaredError\r\n+from layers.activations import ReLU, LinearActivation\r\n+from layers.dense import DenseLayer\r\n+from core.network import NeuralNetwork\r\n import numpy as np\r\n-import os, sys\r\n+import os\r\n+import sys\r\n BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), \"..\"))\r\n sys.path.append(BASE_DIR)\r\n \r\n-from core.network import NeuralNetwork\r\n-from layers.dense import DenseLayer\r\n-from layers.activations import ReLU, LinearActivation\r\n-from losses.loss_functions import MeanSquaredError\r\n-from optimizers.optimizer_classes import SGD, Adam\r\n-from training.trainer import Trainer\r\n \r\n-\r\n def test_simple_regression():\r\n     print(\"Testing simple regression problem...\")\r\n \r\n     np.random.seed(42)\r\n@@ -48,9 +48,10 @@\n \r\n         if (epoch + 1) % 20 == 0:\r\n             network.set_train_mode(False)\r\n             test_loss = network.forward(X_test, y_test)\r\n-            print(f\"Epoch {epoch + 1}/100 - Train Loss: {loss:.4f} - Test Loss: {test_loss:.4f}\")\r\n+            print(\r\n+                f\"Epoch {epoch + 1}/100 - Train Loss: {loss:.4f} - Test Loss: {test_loss:.4f}\")\r\n \r\n     network.set_train_mode(False)\r\n     final_test_loss = network.forward(X_test, y_test)\r\n \r\n@@ -60,5 +61,5 @@\n     print(\"Regression test passed!\")\r\n \r\n \r\n if __name__ == \"__main__\":\r\n-    test_simple_regression()\n\\ No newline at end of file\n+    test_simple_regression()\r\n"
+                }
+            ],
+            "date": 1768335828855,
+            "name": "Commit-0",
+            "content": "import numpy as np\r\nimport os, sys\r\nBASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), \"..\"))\r\nsys.path.append(BASE_DIR)\r\n\r\nfrom core.network import NeuralNetwork\r\nfrom layers.dense import DenseLayer\r\nfrom layers.activations import ReLU, LinearActivation\r\nfrom losses.loss_functions import MeanSquaredError\r\nfrom optimizers.optimizer_classes import SGD, Adam\r\nfrom training.trainer import Trainer\r\n\r\n\r\ndef test_simple_regression():\r\n    print(\"Testing simple regression problem...\")\r\n\r\n    np.random.seed(42)\r\n    X = np.random.randn(200, 5)\r\n    true_weights = np.array([1.5, -2.0, 0.5, 3.0, -1.0])\r\n    y = X.dot(true_weights) + 0.1 * np.random.randn(200)\r\n    y = y.reshape(-1, 1)\r\n\r\n    split_idx = 160\r\n    X_train, X_test = X[:split_idx], X[split_idx:]\r\n    y_train, y_test = y[:split_idx], y[split_idx:]\r\n\r\n    network = NeuralNetwork()\r\n    network.add_layer(DenseLayer(5, 20))\r\n    network.add_layer(ReLU())\r\n    network.add_layer(DenseLayer(20, 10))\r\n    network.add_layer(ReLU())\r\n    network.add_layer(DenseLayer(10, 1))\r\n    network.add_layer(LinearActivation())\r\n    network.set_loss(MeanSquaredError())\r\n\r\n    optimizer = Adam(lr=0.01)\r\n\r\n    print(\"Training network...\")\r\n\r\n    for epoch in range(100):\r\n        network.set_train_mode(True)\r\n        loss = network.forward(X_train, y_train)\r\n        network.backward()\r\n\r\n        params, grads = network.get_params_and_grads()\r\n        for p, g in zip(params, grads):\r\n            optimizer.update(p, g)\r\n\r\n        if (epoch + 1) % 20 == 0:\r\n            network.set_train_mode(False)\r\n            test_loss = network.forward(X_test, y_test)\r\n            print(f\"Epoch {epoch + 1}/100 - Train Loss: {loss:.4f} - Test Loss: {test_loss:.4f}\")\r\n\r\n    network.set_train_mode(False)\r\n    final_test_loss = network.forward(X_test, y_test)\r\n\r\n    print(f\"Final Test Loss (MSE): {final_test_loss:.4f}\")\r\n\r\n    assert final_test_loss < 0.5, f\"Test loss too high: {final_test_loss:.4f}\"\r\n    print(\"Regression test passed!\")\r\n\r\n\r\nif __name__ == \"__main__\":\r\n    test_simple_regression()"
+        }
+    ]
+}

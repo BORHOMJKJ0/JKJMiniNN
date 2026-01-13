@@ -1,0 +1,18 @@
+{
+    "sourceFile": "examples/simple_classification.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1768338715367,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1768338715367,
+            "name": "Commit-0",
+            "content": "from training.trainer import Trainer\r\nfrom optimizers.optimizer_classes import SGD\r\nfrom losses.loss_functions import SoftmaxCrossEntropy\r\nfrom layers.activations import ReLU\r\nfrom layers.dense import DenseLayer\r\nfrom core.network import NeuralNetwork\r\nimport numpy as np\r\nimport sys\r\nsys.path.append('..')\r\n\r\n\r\nnp.random.seed(42)\r\n\r\nn_samples = 300\r\nn_features = 2\r\nn_classes = 3\r\n\r\nX = np.random.randn(n_samples, n_features)\r\ny = np.random.randint(0, n_classes, n_samples)\r\n\r\nsplit = int(0.8 * n_samples)\r\nX_train, X_test = X[:split], X[split:]\r\ny_train, y_test = y[:split], y[split:]\r\n\r\nnetwork = NeuralNetwork()\r\nnetwork.add_layer(DenseLayer(2, 10))\r\nnetwork.add_layer(ReLU())\r\nnetwork.add_layer(DenseLayer(10, 5))\r\nnetwork.add_layer(ReLU())\r\nnetwork.add_layer(DenseLayer(5, 3))\r\nnetwork.set_loss(SoftmaxCrossEntropy())\r\n\r\noptimizer = SGD(lr=0.1)\r\ntrainer = Trainer(network, optimizer)\r\n\r\nprint(\"Training simple classification network...\")\r\ntrainer.fit(X_train, y_train, X_test, y_test,\r\n            epochs=50, batch_size=32, verbose=True)\r\n"
+        }
+    ]
+}

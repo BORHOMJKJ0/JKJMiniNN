@@ -1,16 +1,15 @@
+from training.tuner import HyperparameterTuner
+from optimizers.optimizer_classes import Adam, SGD
+from losses.loss_functions import SoftmaxCrossEntropy
+from layers.activations import ReLU
+from layers.dense import DenseLayer
+from core.network import NeuralNetwork
+from utils.data_utils import load_data, split_data, normalize_data
 import numpy as np
-import os, sys
+import os
+import sys
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(BASE_DIR)
-
-from utils.data_utils import load_data, split_data, normalize_data
-
-from core.network import NeuralNetwork
-from layers.dense import DenseLayer
-from layers.activations import ReLU
-from losses.loss_functions import SoftmaxCrossEntropy
-from optimizers.optimizer_classes import Adam, SGD
-from training.tuner import HyperparameterTuner
 
 
 def build_model(params):
@@ -36,8 +35,10 @@ def test_grid_search():
 
     X, mean, std = normalize_data(X)
 
-    X_train, X_temp, y_train, y_temp = split_data(X, y, test_size=0.3, random_state=42)
-    X_val, X_test, y_val, y_test = split_data(X_temp, y_temp, test_size=0.5, random_state=42)
+    X_train, X_temp, y_train, y_temp = split_data(
+        X, y, test_size=0.3, random_state=42)
+    X_val, X_test, y_val, y_test = split_data(
+        X_temp, y_temp, test_size=0.5, random_state=42)
 
     param_grid = {
         'hidden_size': [8, 16],
@@ -61,7 +62,8 @@ def test_grid_search():
     final_model, final_optimizer = build_model(best_params)
     from training.trainer import Trainer
     trainer = Trainer(final_model, final_optimizer)
-    trainer.fit(X_train, y_train, X_test, y_test, epochs=50, batch_size=16, verbose=False)
+    trainer.fit(X_train, y_train, X_test, y_test,
+                epochs=50, batch_size=16, verbose=False)
 
     test_acc = final_model.accuracy(X_test, y_test)
     print(f"Final test accuracy with best params: {test_acc:.4f}")

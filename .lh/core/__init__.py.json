@@ -1,0 +1,18 @@
+{
+    "sourceFile": "core/__init__.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1768338677475,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1768338677475,
+            "name": "Commit-0",
+            "content": "from .base_layer import Layer\r\nfrom .network import NeuralNetwork\r\n\r\n__all__ = ['Layer', 'NeuralNetwork']\r\n"
+        }
+    ]
+}

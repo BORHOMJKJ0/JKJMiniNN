@@ -1,14 +1,14 @@
+from training.trainer import Trainer
+from optimizers.optimizer_classes import SGD, Adam
+from losses.loss_functions import MeanSquaredError
+from layers.activations import ReLU, LinearActivation
+from layers.dense import DenseLayer
+from core.network import NeuralNetwork
 import numpy as np
-import os, sys
+import os
+import sys
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(BASE_DIR)
-
-from core.network import NeuralNetwork
-from layers.dense import DenseLayer
-from layers.activations import ReLU, LinearActivation
-from losses.loss_functions import MeanSquaredError
-from optimizers.optimizer_classes import SGD, Adam
-from training.trainer import Trainer
 
 
 def test_simple_regression():
@@ -49,7 +49,8 @@ def test_simple_regression():
         if (epoch + 1) % 20 == 0:
             network.set_train_mode(False)
             test_loss = network.forward(X_test, y_test)
-            print(f"Epoch {epoch + 1}/100 - Train Loss: {loss:.4f} - Test Loss: {test_loss:.4f}")
+            print(
+                f"Epoch {epoch + 1}/100 - Train Loss: {loss:.4f} - Test Loss: {test_loss:.4f}")
 
     network.set_train_mode(False)
     final_test_loss = network.forward(X_test, y_test)

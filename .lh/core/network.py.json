@@ -1,0 +1,18 @@
+{
+    "sourceFile": "core/network.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1768338687914,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1768338687914,
+            "name": "Commit-0",
+            "content": "import numpy as np\r\n\r\n\r\nclass NeuralNetwork:\r\n    def __init__(self):\r\n        self.layers = []\r\n        self.loss_layer = None\r\n\r\n    def add_layer(self, layer):\r\n        self.layers.append(layer)\r\n\r\n    def set_loss(self, loss_layer):\r\n        self.loss_layer = loss_layer\r\n\r\n    def init_weights(self, w_init=None, b_init=None):\r\n        for layer in self.layers:\r\n            if hasattr(layer, 'W') and hasattr(layer, 'b'):\r\n                w_shape = layer.W.shape\r\n                b_shape = layer.b.shape\r\n\r\n                if w_init is None:\r\n                    layer.W = np.random.randn(*w_shape) * 0.01\r\n                else:\r\n                    layer.W = w_init(w_shape)\r\n\r\n                if b_init is None:\r\n                    layer.b = np.zeros(b_shape)\r\n                else:\r\n                    layer.b = b_init(b_shape)\r\n\r\n                layer.params = {'W': layer.W, 'b': layer.b}\r\n\r\n    def predict(self, x):\r\n        for layer in self.layers:\r\n            x = layer.forward(x)\r\n        return x\r\n\r\n    def forward(self, x, y):\r\n        output = self.predict(x)\r\n        loss = self.loss_layer.forward(output, y)\r\n        return loss\r\n\r\n    def backward(self):\r\n        dout = self.loss_layer.backward()\r\n        for layer in reversed(self.layers):\r\n            dout = layer.backward(dout)\r\n        return dout\r\n\r\n    def get_params_and_grads(self):\r\n        params = []\r\n        grads = []\r\n\r\n        for layer in self.layers:\r\n            if hasattr(layer, 'params') and getattr(layer, 'params'):\r\n                params.append(layer.params)\r\n                grads.append(getattr(layer, 'grads', {}))\r\n\r\n        return params, grads\r\n\r\n    def accuracy(self, x, y):\r\n        output = self.predict(x)\r\n\r\n        if output.ndim == 1:\r\n            output = output.reshape(1, output.size)\r\n\r\n        pred = np.argmax(output, axis=1)\r\n\r\n        if y.ndim != 1:\r\n            y = np.argmax(y, axis=1)\r\n\r\n        acc = np.sum(pred == y) / float(x.shape[0])\r\n        return acc\r\n\r\n    def set_train_mode(self, mode=True):\r\n        for layer in self.layers:\r\n            if hasattr(layer, 'train_mode'):\r\n                layer.train_mode = mode\r\n"
+        }
+    ]
+}

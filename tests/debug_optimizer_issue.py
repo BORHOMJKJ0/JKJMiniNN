@@ -11,7 +11,7 @@ from training.trainer import Trainer
 np.random.seed(0)
 
 X = np.random.randn(20, 4)
-y = np.random.randint(0,3,size=(20,))
+y = np.random.randint(0, 3, size=(20,))
 
 network = NeuralNetwork()
 network.add_layer(DenseLayer(4, 16))

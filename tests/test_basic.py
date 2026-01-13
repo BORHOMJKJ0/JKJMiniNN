@@ -1,13 +1,13 @@
+from optimizers.optimizer_classes import SGD
+from losses.loss_functions import MeanSquaredError, SoftmaxCrossEntropy
+from layers.activations import ReLU, Sigmoid
+from layers.dense import DenseLayer
+from core.network import NeuralNetwork
 import numpy as np
-import os, sys
+import os
+import sys
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(BASE_DIR)
-
-from core.network import NeuralNetwork
-from layers.dense import DenseLayer
-from layers.activations import ReLU, Sigmoid
-from losses.loss_functions import MeanSquaredError, SoftmaxCrossEntropy
-from optimizers.optimizer_classes import SGD
 
 
 def test_forward_pass():

@@ -1,0 +1,18 @@
+{
+    "sourceFile": "tests/test_iris.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1768338781595,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1768338781595,
+            "name": "Commit-0",
+            "content": "from training.trainer import Trainer\r\nfrom optimizers.optimizer_classes import Adam\r\nfrom losses.loss_functions import SoftmaxCrossEntropy\r\nfrom layers.normalization import BatchNorm\r\nfrom layers.activations import ReLU, Sigmoid\r\nfrom layers.dense import DenseLayer\r\nfrom core.network import NeuralNetwork\r\nfrom utils.data_utils import load_data, split_data, normalize_data\r\nimport numpy as np\r\nimport os\r\nimport sys\r\nBASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), \"..\"))\r\nsys.path.append(BASE_DIR)\r\n\r\n\r\ndef test_iris_classification():\r\n    print(\"Testing on Iris dataset...\")\r\n\r\n    X, y = load_data('iris')\r\n\r\n    X, mean, std = normalize_data(X)\r\n\r\n    X_train, X_test, y_train, y_test = split_data(\r\n        X, y, test_size=0.2, random_state=42)\r\n\r\n    network = NeuralNetwork()\r\n    network.add_layer(DenseLayer(4, 16))\r\n    network.add_layer(Sigmoid())\r\n    network.add_layer(BatchNorm(16))\r\n    network.add_layer(DenseLayer(16, 8))\r\n    network.add_layer(ReLU())\r\n    network.add_layer(DenseLayer(8, 3))\r\n    network.set_loss(SoftmaxCrossEntropy())\r\n\r\n    optimizer = Adam(lr=0.01)\r\n    trainer = Trainer(network, optimizer)\r\n\r\n    print(\"Training network...\")\r\n    trainer.fit(X_train, y_train, X_test, y_test,\r\n                epochs=100, batch_size=16, verbose=True)\r\n\r\n    final_train_acc = network.accuracy(X_train, y_train)\r\n    final_test_acc = network.accuracy(X_test, y_test)\r\n\r\n    print(f\"Final Training Accuracy: {final_train_acc:.4f}\")\r\n    print(f\"Final Test Accuracy: {final_test_acc:.4f}\")\r\n\r\n    assert final_test_acc > 0.85, f\"Test accuracy too low: {final_test_acc:.4f}\"\r\n    print(\"Iris test passed!\")\r\n\r\n\r\nif __name__ == \"__main__\":\r\n    test_iris_classification()\r\n"
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+{
+    "sourceFile": "tests/run_all_tests.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1768338769300,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1768338769300,
+            "name": "Commit-0",
+            "content": "import sys\r\nimport time\r\nimport os\r\nimport sys\r\nBASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), \"..\"))\r\nsys.path.append(BASE_DIR)\r\n\r\nprint(\"Running All Tests for JKJMiniNN\")\r\n\r\ntests = [\r\n    ('test_basic.py', 'Basic functionality tests'),\r\n    ('test_iris.py', 'Iris classification test'),\r\n    ('test_digits.py', 'Digits classification test'),\r\n    ('test_regression.py', 'Regression test'),\r\n]\r\n\r\nresults = []\r\n\r\nfor test_file, description in tests:\r\n    print(f\"Running: {description}\")\r\n    print(f\"File: {test_file}\")\r\n\r\n    start_time = time.time()\r\n    test_path = os.path.join(os.path.dirname(__file__), test_file)\r\n\r\n    try:\r\n        with open(test_path, 'r') as f:\r\n            code = f.read()\r\n        exec(compile(code, test_path, 'exec'), globals())\r\n        elapsed = time.time() - start_time\r\n        results.append((test_file, 'PASSED', elapsed))\r\n        print(f\"{test_file} PASSED in {elapsed:.2f}s\")\r\n    except Exception:\r\n        elapsed = time.time() - start_time\r\n        results.append((test_file, 'FAILED', elapsed))\r\n        print(f\" {test_file} FAILED in {elapsed:.2f}s\")\r\n        import traceback\r\n        print(\"Error:\")\r\n        print(traceback.format_exc())\r\n\r\nprint(\"Test Summary\")\r\n\r\ntotal_passed = sum(1 for _, status, _ in results if status == 'PASSED')\r\ntotal_tests = len(results)\r\n\r\nfor test_file, status, elapsed in results:\r\n    print(f\" {test_file:30} {status:10} ({elapsed:.2f}s)\")\r\n\r\nprint(f\"Total: {total_passed}/{total_tests} tests passed\")\r\n\r\nif total_passed == total_tests:\r\n    print(\" All tests passed successfully!\")\r\nelse:\r\n    print(f\" {total_tests - total_passed} test(s) failed\")\r\n"
+        }
+    ]
+}

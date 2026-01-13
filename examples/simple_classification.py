@@ -1,13 +1,13 @@
+from training.trainer import Trainer
+from optimizers.optimizer_classes import SGD
+from losses.loss_functions import SoftmaxCrossEntropy
+from layers.activations import ReLU
+from layers.dense import DenseLayer
+from core.network import NeuralNetwork
 import numpy as np
 import sys
 sys.path.append('..')
 
-from core.network import NeuralNetwork
-from layers.dense import DenseLayer
-from layers.activations import ReLU
-from losses.loss_functions import SoftmaxCrossEntropy
-from optimizers.optimizer_classes import SGD
-from training.trainer import Trainer
 
 np.random.seed(42)
 
@@ -34,4 +34,5 @@ optimizer = SGD(lr=0.1)
 trainer = Trainer(network, optimizer)
 
 print("Training simple classification network...")
-trainer.fit(X_train, y_train, X_test, y_test, epochs=50, batch_size=32, verbose=True)
+trainer.fit(X_train, y_train, X_test, y_test,
+            epochs=50, batch_size=32, verbose=True)

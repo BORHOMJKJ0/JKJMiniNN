@@ -1,0 +1,18 @@
+{
+    "sourceFile": "losses/loss_functions.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1768338749359,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1768338749359,
+            "name": "Commit-0",
+            "content": "import numpy as np\r\nfrom core.base_layer import Layer\r\n\r\n\r\nclass MeanSquaredError(Layer):\r\n    def __init__(self):\r\n        super().__init__()\r\n        self.y_true = None\r\n        self.y_pred = None\r\n\r\n    def forward(self, y_pred, y_true):\r\n        self.y_true = y_true\r\n        self.y_pred = y_pred\r\n\r\n        loss = np.mean((y_pred - y_true) ** 2)\r\n        return loss\r\n\r\n    def backward(self, dout=1):\r\n        batch_size = self.y_true.shape[0]\r\n        dx = 2 * (self.y_pred - self.y_true) / batch_size\r\n        return dx\r\n\r\n\r\nclass SoftmaxCrossEntropy(Layer):\r\n    def __init__(self):\r\n        super().__init__()\r\n        self.y_true = None\r\n        self.y_pred = None\r\n\r\n    def forward(self, x, y_true):\r\n        self.y_true = y_true\r\n\r\n        exp_x = np.exp(x - np.max(x, axis=1, keepdims=True))\r\n        self.y_pred = exp_x / np.sum(exp_x, axis=1, keepdims=True)\r\n\r\n        batch_size = y_true.shape[0]\r\n\r\n        if y_true.ndim == 1:\r\n            log_probs = - \\\r\n                np.log(self.y_pred[np.arange(batch_size), y_true] + 1e-7)\r\n        else:\r\n            log_probs = -np.sum(y_true * np.log(self.y_pred + 1e-7), axis=1)\r\n\r\n        loss = np.mean(log_probs)\r\n        return loss\r\n\r\n    def backward(self, dout=1):\r\n        batch_size = self.y_true.shape[0]\r\n        dx = self.y_pred.copy()\r\n\r\n        if self.y_true.ndim == 1:\r\n            dx[np.arange(batch_size), self.y_true] -= 1\r\n        else:\r\n            dx -= self.y_true\r\n\r\n        dx = dx / batch_size\r\n        return dx\r\n"
+        }
+    ]
+}

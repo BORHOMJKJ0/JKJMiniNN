@@ -123,6 +123,7 @@ def test_hyperparameter_tuner_smoke():
     y = np.random.randint(0, 3, size=(20,))
 
     tuner = HyperparameterTuner()
-    best_params, best_score = tuner.grid_search(build_model, x, y, x, y, {'hidden': [4], 'lr': [0.01]}, epochs=1, batch_size=8)
+    best_params, best_score = tuner.grid_search(
+        build_model, x, y, x, y, {'hidden': [4], 'lr': [0.01]}, epochs=1, batch_size=8)
     assert isinstance(best_params, dict)
     assert isinstance(best_score, float)

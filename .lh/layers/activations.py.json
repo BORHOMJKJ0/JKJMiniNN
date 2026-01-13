@@ -1,0 +1,18 @@
+{
+    "sourceFile": "layers/activations.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1768338726633,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1768338726633,
+            "name": "Commit-0",
+            "content": "import numpy as np\r\nfrom core.base_layer import Layer\r\n\r\n\r\nclass ReLU(Layer):\r\n    def __init__(self):\r\n        super().__init__()\r\n        self.mask = None\r\n\r\n    def forward(self, x):\r\n        self.mask = (x > 0)\r\n        return x * self.mask\r\n\r\n    def backward(self, dout):\r\n        return dout * self.mask\r\n\r\n\r\nclass Sigmoid(Layer):\r\n    def __init__(self):\r\n        super().__init__()\r\n        self.out = None\r\n\r\n    def forward(self, x):\r\n        self.out = 1 / (1 + np.exp(-x))\r\n        return self.out\r\n\r\n    def backward(self, dout):\r\n        dx = dout * self.out * (1.0 - self.out)\r\n        return dx\r\n\r\n\r\nclass Tanh(Layer):\r\n    def __init__(self):\r\n        super().__init__()\r\n        self.out = None\r\n\r\n    def forward(self, x):\r\n        self.out = np.tanh(x)\r\n        return self.out\r\n\r\n    def backward(self, dout):\r\n        dx = dout * (1 - self.out ** 2)\r\n        return dx\r\n\r\n\r\nclass LinearActivation(Layer):\r\n    def __init__(self):\r\n        super().__init__()\r\n\r\n    def forward(self, x):\r\n        return x\r\n\r\n    def backward(self, dout):\r\n        return dout\r\n"
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+{
+    "sourceFile": "layers/__init__.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1768338723091,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1768338723091,
+            "name": "Commit-0",
+            "content": "from .dense import DenseLayer\r\nfrom .activations import ReLU, Sigmoid, Tanh, LinearActivation\r\nfrom .normalization import Dropout, BatchNorm\r\n\r\n__all__ = ['DenseLayer', 'ReLU', 'Sigmoid', 'Tanh',\r\n           'LinearActivation', 'Dropout', 'BatchNorm']\r\n"
+        }
+    ]
+}

@@ -36,7 +36,8 @@ class SoftmaxCrossEntropy(Layer):
         batch_size = y_true.shape[0]
 
         if y_true.ndim == 1:
-            log_probs = -np.log(self.y_pred[np.arange(batch_size), y_true] + 1e-7)
+            log_probs = - \
+                np.log(self.y_pred[np.arange(batch_size), y_true] + 1e-7)
         else:
             log_probs = -np.sum(y_true * np.log(self.y_pred + 1e-7), axis=1)
 

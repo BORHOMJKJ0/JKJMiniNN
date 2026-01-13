@@ -1,0 +1,18 @@
+{
+    "sourceFile": "tests/test_basic.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1768338452593,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1768338452593,
+            "name": "Commit-0",
+            "content": "from optimizers.optimizer_classes import SGD\r\nfrom losses.loss_functions import MeanSquaredError, SoftmaxCrossEntropy\r\nfrom layers.activations import ReLU, Sigmoid\r\nfrom layers.dense import DenseLayer\r\nfrom core.network import NeuralNetwork\r\nimport numpy as np\r\nimport os\r\nimport sys\r\nBASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), \"..\"))\r\nsys.path.append(BASE_DIR)\r\n\r\n\r\ndef test_forward_pass():\r\n    print(\"Testing forward pass...\")\r\n\r\n    net = NeuralNetwork()\r\n    net.add_layer(DenseLayer(10, 5))\r\n    net.add_layer(ReLU())\r\n    net.add_layer(DenseLayer(5, 3))\r\n\r\n    X = np.random.randn(4, 10)\r\n    output = net.predict(X)\r\n\r\n    assert output.shape == (4, 3), f\"Expected shape (4, 3), got {output.shape}\"\r\n    print(\"Forward pass test passed!\")\r\n\r\n\r\ndef test_backward_pass():\r\n    print(\"Testing backward pass...\")\r\n\r\n    net = NeuralNetwork()\r\n    net.add_layer(DenseLayer(10, 5))\r\n    net.add_layer(ReLU())\r\n    net.add_layer(DenseLayer(5, 3))\r\n    net.set_loss(SoftmaxCrossEntropy())\r\n\r\n    X = np.random.randn(4, 10)\r\n    y = np.array([0, 1, 2, 1])\r\n\r\n    loss = net.forward(X, y)\r\n    net.backward()\r\n\r\n    params, grads = net.get_params_and_grads()\r\n\r\n    assert len(params) == 2, \"Expected 2 layers with parameters\"\r\n    assert len(grads) == 2, \"Expected 2 layers with gradients\"\r\n\r\n    print(\"Backward pass test passed!\")\r\n\r\n\r\ndef test_optimizer():\r\n    print(\"Testing optimizer...\")\r\n\r\n    net = NeuralNetwork()\r\n    net.add_layer(DenseLayer(10, 5))\r\n    net.add_layer(ReLU())\r\n    net.add_layer(DenseLayer(5, 3))\r\n    net.set_loss(SoftmaxCrossEntropy())\r\n\r\n    X = np.random.randn(4, 10)\r\n    y = np.array([0, 1, 2, 1])\r\n\r\n    optimizer = SGD(lr=0.01)\r\n\r\n    loss_before = net.forward(X, y)\r\n    net.backward()\r\n\r\n    params, grads = net.get_params_and_grads()\r\n    for p, g in zip(params, grads):\r\n        optimizer.update(p, g)\r\n\r\n    loss_after = net.forward(X, y)\r\n\r\n    print(f\"Loss before: {loss_before:.4f}\")\r\n    print(f\"Loss after: {loss_after:.4f}\")\r\n    print(\"Optimizer test passed!\")\r\n\r\n\r\nif __name__ == \"__main__\":\r\n    test_forward_pass()\r\n    test_backward_pass()\r\n    test_optimizer()\r\n    print(\"All basic tests passed!\")\r\n\r\n\r\ndef test_init_weights():\r\n    print(\"Testing init_weights...\")\r\n\r\n    net = NeuralNetwork()\r\n    net.add_layer(DenseLayer(10, 5))\r\n    net.add_layer(ReLU())\r\n    net.add_layer(DenseLayer(5, 3))\r\n\r\n    def w_init(shape):\r\n        return np.full(shape, 0.123)\r\n\r\n    def b_init(shape):\r\n        return np.full(shape, 0.456)\r\n\r\n    net.init_weights(w_init=w_init, b_init=b_init)\r\n\r\n    params, grads = net.get_params_and_grads()\r\n    assert len(params) == 2, \"Expected 2 layers with parameters\"\r\n\r\n    for p in params:\r\n        assert np.allclose(p['W'], 0.123), \"Weights not initialized correctly\"\r\n        assert np.allclose(p['b'], 0.456), \"Biases not initialized correctly\"\r\n\r\n    print(\"init_weights test passed!\")\r\n"
+        }
+    ]
+}

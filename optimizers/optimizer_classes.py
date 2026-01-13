@@ -29,7 +29,8 @@ class Momentum(Optimizer):
                 self.v[pid][key] = np.zeros_like(val)
 
         for key in params.keys():
-            self.v[pid][key] = self.momentum * self.v[pid][key] - self.lr * grads[key]
+            self.v[pid][key] = self.momentum * \
+                self.v[pid][key] - self.lr * grads[key]
             params[key] += self.v[pid][key]
 
 
@@ -47,7 +48,8 @@ class AdaGrad(Optimizer):
 
         for key in params.keys():
             self.h[pid][key] += grads[key] ** 2
-            params[key] -= self.lr * grads[key] / (np.sqrt(self.h[pid][key]) + 1e-7)
+            params[key] -= self.lr * grads[key] / \
+                (np.sqrt(self.h[pid][key]) + 1e-7)
 
 
 class Adam(Optimizer):
@@ -69,10 +71,14 @@ class Adam(Optimizer):
                 self.v[pid][key] = np.zeros_like(val)
 
         self.iter += 1
-        lr_t = self.lr * np.sqrt(1.0 - self.beta2 ** self.iter) / (1.0 - self.beta1 ** self.iter)
+        lr_t = self.lr * np.sqrt(1.0 - self.beta2 **
+                                 self.iter) / (1.0 - self.beta1 ** self.iter)
 
         for key in params.keys():
-            self.m[pid][key] = self.beta1 * self.m[pid][key] + (1 - self.beta1) * grads[key]
-            self.v[pid][key] = self.beta2 * self.v[pid][key] + (1 - self.beta2) * (grads[key] ** 2)
+            self.m[pid][key] = self.beta1 * \
+                self.m[pid][key] + (1 - self.beta1) * grads[key]
+            self.v[pid][key] = self.beta2 * self.v[pid][key] + \
+                (1 - self.beta2) * (grads[key] ** 2)
 
-            params[key] -= lr_t * self.m[pid][key] / (np.sqrt(self.v[pid][key]) + 1e-7)
+            params[key] -= lr_t * self.m[pid][key] / \
+                (np.sqrt(self.v[pid][key]) + 1e-7)

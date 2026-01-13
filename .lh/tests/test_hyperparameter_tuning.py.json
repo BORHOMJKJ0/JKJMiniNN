@@ -1,0 +1,18 @@
+{
+    "sourceFile": "tests/test_hyperparameter_tuning.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1768338778642,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1768338778642,
+            "name": "Commit-0",
+            "content": "from training.tuner import HyperparameterTuner\r\nfrom optimizers.optimizer_classes import Adam, SGD\r\nfrom losses.loss_functions import SoftmaxCrossEntropy\r\nfrom layers.activations import ReLU\r\nfrom layers.dense import DenseLayer\r\nfrom core.network import NeuralNetwork\r\nfrom utils.data_utils import load_data, split_data, normalize_data\r\nimport numpy as np\r\nimport os\r\nimport sys\r\nBASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), \"..\"))\r\nsys.path.append(BASE_DIR)\r\n\r\n\r\ndef build_model(params):\r\n    network = NeuralNetwork()\r\n\r\n    network.add_layer(DenseLayer(4, params['hidden_size']))\r\n    network.add_layer(ReLU())\r\n    network.add_layer(DenseLayer(params['hidden_size'], 3))\r\n    network.set_loss(SoftmaxCrossEntropy())\r\n\r\n    if params['optimizer'] == 'adam':\r\n        optimizer = Adam(lr=params['learning_rate'])\r\n    else:\r\n        optimizer = SGD(lr=params['learning_rate'])\r\n\r\n    return network, optimizer\r\n\r\n\r\ndef test_grid_search():\r\n    print(\"Testing Grid Search for hyperparameter tuning...\")\r\n\r\n    X, y = load_data('iris')\r\n\r\n    X, mean, std = normalize_data(X)\r\n\r\n    X_train, X_temp, y_train, y_temp = split_data(\r\n        X, y, test_size=0.3, random_state=42)\r\n    X_val, X_test, y_val, y_test = split_data(\r\n        X_temp, y_temp, test_size=0.5, random_state=42)\r\n\r\n    param_grid = {\r\n        'hidden_size': [8, 16],\r\n        'learning_rate': [0.01, 0.001],\r\n        'optimizer': ['adam', 'sgd']\r\n    }\r\n\r\n    tuner = HyperparameterTuner()\r\n    best_params, best_score = tuner.grid_search(\r\n        build_model,\r\n        X_train, y_train,\r\n        X_val, y_val,\r\n        param_grid,\r\n        epochs=30,\r\n        batch_size=16\r\n    )\r\n\r\n    print(f\"Best parameters found: {best_params}\")\r\n    print(f\"Best validation score: {best_score:.4f}\")\r\n\r\n    final_model, final_optimizer = build_model(best_params)\r\n    from training.trainer import Trainer\r\n    trainer = Trainer(final_model, final_optimizer)\r\n    trainer.fit(X_train, y_train, X_test, y_test,\r\n                epochs=50, batch_size=16, verbose=False)\r\n\r\n    test_acc = final_model.accuracy(X_test, y_test)\r\n    print(f\"Final test accuracy with best params: {test_acc:.4f}\")\r\n\r\n\r\nif __name__ == \"__main__\":\r\n    test_grid_search()\r\n"
+        }
+    ]
+}

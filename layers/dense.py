@@ -3,9 +3,16 @@ from core.base_layer import Layer
 
 
 class DenseLayer(Layer):
-    def __init__(self, n_in, n_out):
+    def __init__(self, n_in, n_out, weight_init='he'):
         super().__init__()
-        self.W = np.random.randn(n_in, n_out) * 0.01
+
+        if weight_init == 'he':
+            self.W = np.random.randn(n_in, n_out) * np.sqrt(2.0 / n_in)
+        elif weight_init == 'xavier':
+            self.W = np.random.randn(n_in, n_out) * np.sqrt(1.0 / n_in)
+        else:
+            self.W = np.random.randn(n_in, n_out) * 0.01
+
         self.b = np.zeros((1, n_out))
         self.params = {'W': self.W, 'b': self.b}
         self.x_input = None

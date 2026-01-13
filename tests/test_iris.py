@@ -1,17 +1,16 @@
+from training.trainer import Trainer
+from optimizers.optimizer_classes import Adam
+from losses.loss_functions import SoftmaxCrossEntropy
+from layers.normalization import BatchNorm
+from layers.activations import ReLU, Sigmoid
+from layers.dense import DenseLayer
+from core.network import NeuralNetwork
+from utils.data_utils import load_data, split_data, normalize_data
 import numpy as np
-import os, sys
+import os
+import sys
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(BASE_DIR)
-
-from utils.data_utils import load_data, split_data, normalize_data
-
-from core.network import NeuralNetwork
-from layers.dense import DenseLayer
-from layers.activations import ReLU, Sigmoid
-from layers.normalization import BatchNorm
-from losses.loss_functions import SoftmaxCrossEntropy
-from optimizers.optimizer_classes import Adam
-from training.trainer import Trainer
 
 
 def test_iris_classification():
@@ -21,7 +20,8 @@ def test_iris_classification():
 
     X, mean, std = normalize_data(X)
 
-    X_train, X_test, y_train, y_test = split_data(X, y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = split_data(
+        X, y, test_size=0.2, random_state=42)
 
     network = NeuralNetwork()
     network.add_layer(DenseLayer(4, 16))
@@ -36,7 +36,8 @@ def test_iris_classification():
     trainer = Trainer(network, optimizer)
 
     print("Training network...")
-    trainer.fit(X_train, y_train, X_test, y_test, epochs=100, batch_size=16, verbose=True)
+    trainer.fit(X_train, y_train, X_test, y_test,
+                epochs=100, batch_size=16, verbose=True)
 
     final_train_acc = network.accuracy(X_train, y_train)
     final_test_acc = network.accuracy(X_test, y_test)

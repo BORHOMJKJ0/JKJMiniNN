@@ -22,7 +22,8 @@ class HyperparameterTuner:
             model, optimizer = build_model_fn(params)
 
             trainer = Trainer(model, optimizer)
-            trainer.fit(x_train, y_train, x_val, y_val, epochs=epochs, batch_size=batch_size, verbose=False)
+            trainer.fit(x_train, y_train, x_val, y_val,
+                        epochs=epochs, batch_size=batch_size, verbose=False)
 
             val_acc = model.accuracy(x_val, y_val)
 
@@ -64,7 +65,8 @@ class HyperparameterTuner:
             model, optimizer = build_model_fn(params)
 
             trainer = Trainer(model, optimizer)
-            trainer.fit(x_train, y_train, x_val, y_val, epochs=epochs, batch_size=batch_size, verbose=False)
+            trainer.fit(x_train, y_train, x_val, y_val,
+                        epochs=epochs, batch_size=batch_size, verbose=False)
 
             val_acc = model.accuracy(x_val, y_val)
 

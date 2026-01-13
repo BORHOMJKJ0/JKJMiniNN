@@ -42,8 +42,10 @@ class BatchNorm(Layer):
             mu = np.mean(x, axis=0, keepdims=True)
             var = np.var(x, axis=0, keepdims=True)
 
-            self.running_mean = self.momentum * self.running_mean + (1 - self.momentum) * mu
-            self.running_var = self.momentum * self.running_var + (1 - self.momentum) * var
+            self.running_mean = self.momentum * \
+                self.running_mean + (1 - self.momentum) * mu
+            self.running_var = self.momentum * \
+                self.running_var + (1 - self.momentum) * var
 
             self.xc = x - mu
             self.std = np.sqrt(var + self.eps)
@@ -64,7 +66,8 @@ class BatchNorm(Layer):
         dgamma = np.sum(dout * self.xn, axis=0, keepdims=True)
 
         dx = (1.0 / N) * (self.gamma / self.std) * (
-            N * dout - np.sum(dout, axis=0, keepdims=True) - self.xn * np.sum(dout * self.xn, axis=0, keepdims=True)
+            N * dout - np.sum(dout, axis=0, keepdims=True) -
+            self.xn * np.sum(dout * self.xn, axis=0, keepdims=True)
         )
 
         self.grads = {'gamma': dgamma, 'beta': dbeta}
